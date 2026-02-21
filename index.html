@@ -1,296 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Sorry Baby</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sorry Page</title>
 
 <style>
   body {
     margin: 0;
-    height: 100vh;
-    background:
-      radial-gradient(circle at top, #2b2f77, #0b0f2a 60%);
-    overflow: hidden;
+    padding: 0;
+    background: radial-gradient(circle at top, #0b1b2b, #000814); /* dark night sky */
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
-    color: #fff;
   }
 
-  /* Moonlight sweep */
-  body::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      120deg,
-      transparent 30%,
-      rgba(120,150,255,0.12),
-      transparent 70%
-    );
-    animation: moonSweep 14s ease-in-out infinite;
-    pointer-events: none;
-  }
-
-  @keyframes moonSweep {
-    0% { transform: translateX(-40%); }
-    50% { transform: translateX(40%); }
-    100% { transform: translateX(-40%); }
-  }
-
-  /* Stars */
-  .star {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: #fff;
-    border-radius: 50%;
-    opacity: 0.6;
-    animation: twinkle 4s infinite ease-in-out;
-  }
-
-  @keyframes twinkle {
-    0%,100% { opacity: 0.3; }
-    50% { opacity: 0.9; }
-  }
-
-  .container {
+  #container {
     text-align: center;
-    position: relative;
-    z-index: 2;
+    user-select: none;
   }
 
-  /* Tulip sway */
-  .bouquet {
-    width: 120px;
+  #bouquet {
+    width: 250px;
     cursor: pointer;
-    animation: sway 5s ease-in-out infinite;
-    transform-origin: bottom center;
-    filter: drop-shadow(0 0 10px rgba(255,120,150,0.4));
+    filter: drop-shadow(0 0 10px #ff8c00); /* slight glow */
+    transition: transform 0.2s;
   }
 
-  @keyframes sway {
-    0% { transform: rotate(-1.5deg); }
-    50% { transform: rotate(1.5deg); }
-    100% { transform: rotate(-1.5deg); }
+  #bouquet:active {
+    transform: scale(0.95);
   }
 
-  .hint {
-    margin-top: 12px;
-    font-size: 13px;
-    color: #9db4ff;
-    opacity: 0.75;
-  }
-
-  /* Envelope */
-  .envelope {
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    width: 260px;
-    height: 170px;
-    transition: transform 0.6s ease;
-    perspective: 800px;
-  }
-
-  .envelope.open {
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  .envelope-body {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #11152f;
-    border-radius: 10px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  }
-
-  .envelope-flap {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 130px solid transparent;
-    border-right: 130px solid transparent;
-    border-bottom: 90px solid #1a1f4a;
-    top: -90px;
-    left: 0;
-    transform-origin: bottom center;
-    transition: transform 0.8s ease;
-    backface-visibility: hidden;
-  }
-
-  .envelope.open .envelope-flap {
-    transform: rotateX(180deg);
-  }
-
-  .letter {
-    position: absolute;
-    inset: 15px;
-    background: #0f1438;
-    border-radius: 8px;
-    padding: 18px;
+  #letter {
+    margin-top: 20px;
+    font-family: 'Cursive', sans-serif;
+    font-size: 28px;
     opacity: 0;
-    transition: opacity 0.6s ease 0.6s;
-    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493, 0 0 30px #ff69b4;
+    transition: opacity 0.6s ease-out;
   }
 
-  .envelope.open .letter {
-    opacity: 1;
-  }
-
-  .letter h3 {
-    margin: 0 0 10px;
-    color: #ff8fa3;
-    font-weight: 500;
-  }
-
-  .letter p {
-    font-size: 14px;
-    color: #d6dbff;
-  }
-
-  .forgive-btn {
-    margin-top: 14px;
-    padding: 8px 18px;
-    border: none;
-    border-radius: 20px;
-    background: #ff8fa3;
-    color: #0b0f2a;
-    font-size: 13px;
-    cursor: pointer;
-  }
-
-  .thankyou {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #ffb3c1;
-    display: none;
-  }
-
-  /* Glowy floating text */
-  .floating {
+  .float-text {
     position: absolute;
-    bottom: 160px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 17px;
-    animation: floatUp 2.2s ease forwards;
+    font-size: 26px;
+    font-weight: bold;
+    color: #ffb6c1;
+    text-shadow: 0 0 5px #fff, 0 0 10px #ffb6c1, 0 0 20px #ff69b4;
+    animation: floatUp 2s ease-out forwards;
     pointer-events: none;
   }
 
   @keyframes floatUp {
-    0% { opacity: 0; transform: translate(-50%, 0); }
-    25% { opacity: 1; }
-    100% { opacity: 0; transform: translate(-50%, -130px); }
-  }
-
-  /* Petals */
-  .petal {
-    position: absolute;
-    top: -20px;
-    width: 10px;
-    height: 14px;
-    background: #ff8fa3;
-    border-radius: 60% 40% 60% 40%;
-    opacity: 0.8;
-    animation: fall 5s linear forwards;
-  }
-
-  @keyframes fall {
-    to {
-      transform: translateY(100vh) rotate(360deg);
-      opacity: 0;
-    }
+    0% { transform: translateY(0px); opacity:1; }
+    100% { transform: translateY(-120px); opacity:0; }
   }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-  <!-- Tulip -->
-  <svg class="bouquet" id="bouquet" viewBox="0 0 100 160">
-    <path d="M50 25 C35 10,20 30,35 55 C42 65,48 70,50 75
-             C52 70,58 65,65 55 C80 30,65 10,50 25Z"
-          fill="#ff6f91"/>
-    <rect x="47" y="75" width="6" height="70" fill="#2e8b57"/>
-    <path d="M47 100 C20 105,25 135,47 140Z" fill="#3cb371"/>
-    <path d="M53 100 C80 105,75 135,53 140Z" fill="#3cb371"/>
-  </svg>
-
-  <div class="hint">tap the tulip 5 times</div>
-
-  <div class="envelope" id="envelope">
-    <div class="envelope-flap"></div>
-    <div class="envelope-body"></div>
-
-    <div class="letter">
-      <h3>Sorry baby</h3>
-      <p>I’ll make sure it doesn’t happen again.</p>
-
-      <button class="forgive-btn" id="forgiveBtn">Forgive me?</button>
-      <div class="thankyou" id="thankYou">Thank you for forgiving me 🤍</div>
-    </div>
-  </div>
-
+<div id="container">
+  <!-- tulip bouquet image -->
+  <img src="https://i.ibb.co/ZYW3VTp/tulip-bouquet.png" id="bouquet" alt="Tulip Bouquet">
+  <div id="letter">💌 Sorry…</div>
 </div>
 
 <script>
-  /* stars */
-  for (let i = 0; i < 80; i++) {
-    const star = document.createElement("div");
-    star.className = "star";
-    star.style.left = Math.random() * 100 + "vw";
-    star.style.top = Math.random() * 100 + "vh";
-    star.style.animationDelay = Math.random() * 4 + "s";
-    document.body.appendChild(star);
+let taps = 0;
+const bouquet = document.getElementById('bouquet');
+const letter = document.getElementById('letter');
+
+const nicknames = [
+  "baby cutie 🌸",
+  "sunshine ☀️",
+  "sweet pea 🍬",
+  "love bug 🐞",
+  "pumpkin 🎃"
+];
+
+bouquet.addEventListener('click', () => {
+  taps++;
+
+  // show floating glowy text
+  showFloatingText(nicknames[taps - 1] || "sorry baby ❤️");
+
+  if (taps === 5) {
+    letter.style.opacity = 1;
   }
+});
 
-  let taps = 0;
-  const bouquet = document.getElementById("bouquet");
-  const envelope = document.getElementById("envelope");
-  const forgiveBtn = document.getElementById("forgiveBtn");
-  const thankYou = document.getElementById("thankYou");
+function showFloatingText(text) {
+  const floatEl = document.createElement('div');
+  floatEl.textContent = text;
+  floatEl.className = 'float-text';
+  floatEl.style.left = (window.innerWidth/2 + (Math.random()*80 - 40)) + 'px';
+  floatEl.style.top = (window.innerHeight/2) + 'px';
+  document.body.appendChild(floatEl);
 
-  const names = ["baby", "cutie", "sunshine", "angel", "love"];
-
-  bouquet.addEventListener("click", () => {
-    if (taps < 5) {
-      glowText(names[taps], taps + 1);
-      taps++;
-    }
-    if (taps === 5) envelope.classList.add("open");
+  floatEl.addEventListener('animationend', () => {
+    floatEl.remove();
   });
-
-  forgiveBtn.addEventListener("click", () => {
-    thankYou.style.display = "block";
-    for (let i = 0; i < 18; i++) {
-      const petal = document.createElement("div");
-      petal.className = "petal";
-      petal.style.left = Math.random() * window.innerWidth + "px";
-      document.body.appendChild(petal);
-      setTimeout(() => petal.remove(), 5000);
-    }
-  });
-
-  function glowText(name, level) {
-    const el = document.createElement("div");
-    el.className = "floating";
-    el.style.color = "#ff9eb3";
-    el.style.textShadow = `
-      0 0 ${6 + level * 2}px rgba(255,158,179,0.9),
-      0 0 ${12 + level * 3}px rgba(255,158,179,0.6),
-      0 0 ${18 + level * 4}px rgba(255,158,179,0.4)
-    `;
-    el.innerText = `sorry ${name}`;
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 2200);
-  }
+}
 </script>
 
 </body>
